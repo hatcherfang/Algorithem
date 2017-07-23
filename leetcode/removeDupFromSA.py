@@ -13,6 +13,7 @@
     Your function should return length = 2, with the first two elements of nums
     being 1 and 2 respectively. It doesn't matter what you leave beyond the new
     length.
+
     Author: hatcher fang
 '''
 
@@ -36,5 +37,6 @@ def removeDupFromSortedArray(nums):
 
 if __name__ == '__main__':
     L = [1, 1, 2, 2, 2, 3, 4, 4, 6, 7, 9]
+    print L
     k = removeDupFromSortedArray(L)
     print L[0:k]
