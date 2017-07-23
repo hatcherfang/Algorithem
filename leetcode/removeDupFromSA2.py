@@ -19,15 +19,17 @@ def removeDupFromSortedArray2(nums):
         :type nums: List[int]
         :rtype: int
     """
+    # cur is the duplicate step and its value can be 1, 2, 3 ..
+    cur = 2
     if not nums:
         return
-    if len(nums) <= 2:
+    if len(nums) <= cur:
         return len(nums)
-    i = 2
-    k = 2
+    i = cur
+    k = cur
     length = len(nums)
     while i < length:
-        if nums[i] != nums[k-2]:
+        if nums[i] != nums[k-cur]:
             nums[k] = nums[i]
             k = k + 1
         i = i + 1
