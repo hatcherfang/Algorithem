@@ -28,6 +28,9 @@ def removeDupFromSortedArray2(nums):
     i = cur
     k = cur
     length = len(nums)
+    # At first i pointer value equal to k, k moved only when k-cur is not equal
+    # to i's
+    # value
     while i < length:
         if nums[i] != nums[k-cur]:
             nums[k] = nums[i]
