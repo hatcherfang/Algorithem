@@ -18,25 +18,28 @@
 '''
 
 
-def removeDupFromSortedArray(nums):
-    """
-        :type nums: List[int]
-        :rtype: int
-    """
-    if not nums:
-        return
-    i = 1
-    k = 0
-    length = len(nums)
-    while i < length:
-        if nums[i] != nums[k]:
-            k = k + 1
-            nums[k] = nums[i]
-        i = i + 1
-    return k+1
+class Solution(object):
+    def removeDupFromSortedArray(self, nums):
+        """
+            :type nums: List[int]
+            :rtype: int
+        """
+        if not nums:
+            return
+        i = 1
+        k = 0
+        length = len(nums)
+        while i < length:
+            if nums[i] != nums[k]:
+                k = k + 1
+                nums[k] = nums[i]
+            i = i + 1
+        return k+1
 
 if __name__ == '__main__':
     L = [1, 1, 2, 2, 2, 3, 4, 4, 6, 7, 9]
+    L = [4, 4, 5, 5, 6, 9, 0, 0]
     print L
-    k = removeDupFromSortedArray(L)
+    cs = Solution()
+    k = cs.removeDupFromSortedArray(L)
     print L[0:k]
