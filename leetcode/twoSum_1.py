@@ -34,6 +34,7 @@ class Solution(object):
                 pass
         return []
 
+
 class Solution2(object):
     def twoSum(self, nums, target):
         """
@@ -50,14 +51,3 @@ class Solution2(object):
             else:
                 defaultDict[target-num] = index
         return []
-
-if __name__ == '__main__':
-    cs = Solution()
-    cs2 = Solution2()
-    nums = [2, 7, 11, 15]
-    target = 13
-    nums = [3, 2, 4]
-    target = 6
-    print cs.twoSum(nums, target)
-    print cs2.twoSum(nums, target)
-
