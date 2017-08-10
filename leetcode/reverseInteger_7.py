@@ -36,11 +36,3 @@ class Solution2(object):
         # reverse
         x = int(repr(x*flag)[::-1])
         return flag*x*(x < 2**31)
-
-if __name__ == '__main__':
-    s = Solution()
-    cs2 = Solution2()
-    x = -123456789
-    print x
-    print s.reverse(x)
-    print cs2.reverse(x)
