@@ -14,37 +14,39 @@
 '''
 
 
-def searchInRSA(nums, target):
-    """
-       :type nums: List[int]
-       :type target: int
-       :rtype: int
-    """
-    low = 0
-    hight = len(nums) - 1
-    while low <= hight:
-        mid = (low+hight)/2
-        print nums[mid], target
-        if target == nums[mid]:
-            return mid
-        else:
-            if nums[low] <= nums[mid]:
-                if target < nums[mid] and target >= nums[low]:
-                    hight = mid - 1
-                else:
-                    low = mid + 1
+class Solution(object):
+    def searchInRSA(self, nums, target):
+        """
+           :type nums: List[int]
+           :type target: int
+           :rtype: int
+        """
+        low = 0
+        hight = len(nums) - 1
+        while low <= hight:
+            mid = (low+hight)/2
+            print nums[mid], target
+            if target == nums[mid]:
+                return mid
             else:
-                if target > nums[mid] and target <= nums[hight]:
-                    low = mid + 1
+                if nums[low] <= nums[mid]:
+                    if target < nums[mid] and target >= nums[low]:
+                        hight = mid - 1
+                    else:
+                        low = mid + 1
                 else:
-                    hight = mid - 1
-    return -1
+                    if target > nums[mid] and target <= nums[hight]:
+                        low = mid + 1
+                    else:
+                        hight = mid - 1
+        return -1
 
 if __name__ == '__main__':
+    cs = Solution()
     # nums = [5, 6, 0, 1, 2, 3, 4]
     # target = 6
     nums = [1, 3, 5]
     target = 1
-    index = searchInRSA(nums, target)
+    index = cs.searchInRSA(nums, target)
     if index != -1:
         print index, nums[index]
