@@ -21,4 +21,6 @@ class Solution(object):
         return self.climbStairs(n-1) + self.climbStairs(n-2)
 if __name__ == '__main__':
     cs = Solution()
+    print cs.climbStairs(3)
+    print cs.climbStairs(4)
     print cs.climbStairs(35)
