@@ -1,6 +1,8 @@
 # coding=utf-8
 import random
 import time
+# python has no absract class, we use abc to create
+from abc import ABCMeta, abstractmethod
 '''
 I make the program to help children study arithmetic operations
 
@@ -8,8 +10,68 @@ Author: hatcher fang
 '''
 
 
-class arithmeticOperations(object):
+class Operation(object):
+    '''abstract class'''
+    __metaclass__ = ABCMeta
 
+    @abstractmethod
+    def get_result(self, a, b): pass
+
+
+class addOperation(Operation):
+    '''concrete class'''
+    def get_result(self, a, b):
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return a+b
+        else:
+            return 'param error'
+
+
+class subOperation(Operation):
+    '''concrete class'''
+    def get_result(self, a, b):
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return a-b
+        else:
+            return 'param error'
+
+
+class mulOperation(Operation):
+    '''concrete class'''
+    def get_result(self, a, b):
+        if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+            return a*float(b)
+        else:
+            return 'param error'
+
+
+class divOperation(Operation):
+    '''concrete class'''
+    def get_result(self, a, b):
+        if b != 0 and isinstance(a, (int, float)) and isinstance(b, (int, float)
+                                                                 ):
+            return round(a/float(b), 2)
+        else:
+            return 'param error'
+
+
+class factoryOperations(object):
+    def create_factory(self, op):
+        op_dict = {
+            '+': addOperation(),
+            '-': subOperation(),
+            '*': mulOperation(),
+            '/': divOperation()
+        }
+        opObj = op_dict.get(op)
+        if not opObj:
+            print '操作符格式有误！'
+            return
+        else:
+            return opObj
+
+
+class factoryOperationsWrapper(object):
     def __init__(self):
         self.rightCount = 0
         self.wrongCount = 0
@@ -24,262 +86,133 @@ class arithmeticOperations(object):
                 else '不错哦！' if accuracy >= 60 else
                 '多多练习，你一定可以的！\n')
 
-    def addition(self):
-        print '请先设定加法运算范围哦！ \n例如10以内加法请输入：10'
-        scope = raw_input()
-        while not scope.isdigit():
-            print "请输入数字作为运算范围哦！"
-            scope = raw_input()
-        scope = int(scope)
-        print '\n欢迎进入 %d 以内加法！' % scope
-        print '退出该运算请输入: tc'
-        print '查看当前成绩请输入：ck'
-        while 1:
-            a = random.randint(0, scope)
-            b = random.randint(0, scope)
-            print str(a) + '+' + str(b) + '=' + '?'
-            c = raw_input()
-            if c == 'tc':
-                print '\n目前为止您的得分是：',
-                self.arithmetic_result()
-                print '下次再见哦！\n'
-                return
-            if c == 'ck':
-                print '\n目前为止,',
-                self.arithmetic_result()
-                print '继续加油哦！\n'
-                continue
-            if c == 'gh':
-                print '请输入新的运算范围：'
-                scope = raw_input()
-                while not scope.isdigit():
-                    print "请输入数字更换运算范围"
-                    scope = raw_input()
-                scope = int(scope)
-                continue
-            if not c.isdigit():
-                print '继续答题请输入数字, 退出请输入：tc, 查看成绩请输入：ck, 更换运算范围请输入：gh'
-                continue
-            c = int(c)
-            while a + b != c:
-                print '很可惜，您答错了，请重新输入:'
-                print str(a) + '+' + str(b) + '=' + '?'
-                c = raw_input()
-                while not c.isdigit():
-                    print '请输入数字类型或输入tc跳过本题'
-                    c = raw_input()
-                    if c == 'tc':
-                        break
-                if c == 'tc':
-                    break
-                c = int(c)
-                self.wrongCount = self.wrongCount + 1
-                self.total = self.total + 1
-                if self.wrongCount > self.rightCount and self.total % 10 == 0:
-                    print '\n目前为止，',
-                    self.arithmetic_result()
-            if c == 'tc':
-                continue
-            self.rightCount = self.rightCount + 1
-            self.total = self.total + 1
-            print '答对了，您真聪明！\n'
-            if self.total % 100 == 0:
-                print '您已经答了上百道题,劳逸结合对学习事半功倍哦！\n'
-                continue
-            if self.total % 10 == 0:
-                print '\n目前为止，',
-                self.arithmetic_result()
-                print '继续加油！\n'
+    def is_float(self, s):
+        try:
+            float(s)
+            return True
+        except:
+            return False
 
-    def substration(self):
-        print '请先设定减法运算范围哦！ \n例如10以内减法请输入：10'
-        scope = raw_input()
-        while not scope.isdigit():
-            print "请输入数字作为运算范围哦！"
-            scope = raw_input()
-        scope = int(scope)
-        print '\n欢迎进入 %d 以内减法！' % scope
-        print '退出该运算请输入: tc'
-        print '查看当前成绩请输入：ck'
-        while 1:
-            a = random.randint(0, scope)
-            b = random.randint(0, scope)
-            while a < b:
+    def str2Num(self, c):
+        try:
+            if c.isdigit():
+                c = int(c)
+            else:
+                c = float(c)
+        except:
+            c = 'error type'
+        return c
+
+    def get_ab(self, floatBool, subBool, divBool, scope, op):
+        while True:
+            if floatBool:
+                if random.randint(0, 1):
+                    a = random.randint(0, scope)
+                    b = random.randint(0, scope)
+                else:
+                    a = round(random.uniform(0, scope), 2)
+                    b = round(random.uniform(0, scope), 2)
+            else:
                 a = random.randint(0, scope)
                 b = random.randint(0, scope)
-            print str(a) + '-' + str(b) + '=' + '?'
-            c = raw_input()
-            if c == 'tc':
-                print '\n目前为止您的得分是：',
-                self.arithmetic_result()
-                print '下次再见哦！\n'
-                return
-            if c == 'ck':
-                print '\n目前为止,',
-                self.arithmetic_result()
-                print '继续加油哦！\n'
+            if not subBool and a < b:
                 continue
-            if c == 'gh':
-                print '请输入新的运算范围：'
-                scope = raw_input()
-                while not scope.isdigit():
-                    print "请输入数字更换运算范围"
-                    scope = raw_input()
-                scope = int(scope)
-                continue
-            if not c.isdigit():
-                print '继续答题请输入数字, 退出请输入：tc, 查看成绩请输入：ck, 更换运算范围请输入：gh'
-                continue
-            c = int(c)
-            while a - b != c:
-                print '很可惜，您答错了，请重新输入:'
-                print str(a) + '-' + str(b) + '=' + '?'
-                c = raw_input()
-                while not c.isdigit():
-                    print '请输入数字类型或输入tc跳过本题'
-                    c = raw_input()
-                    if c == 'tc':
-                        break
-                if c == 'tc':
-                    break
-                c = int(c)
-                self.wrongCount = self.wrongCount + 1
-                self.total = self.total + 1
-                if self.wrongCount > self.rightCount and self.total % 10 == 0:
-                    print '\n目前为止，',
-                    self.arithmetic_result()
-            if c == 'tc':
-                continue
-            self.rightCount = self.rightCount + 1
-            self.total = self.total + 1
-            print '答对了，您真聪明！\n'
-            if self.total % 100 == 0:
-                print '您已经答了上百道题,劳逸结合对学习事半功倍哦！\n'
-                continue
-            if self.total % 10 == 0:
-                print '\n目前为止，',
-                self.arithmetic_result()
-                print '继续加油！\n'
-
-    def multiplication(self):
-        print '请先设定乘法运算范围哦！ \n例如10以内乘法请输入：10'
-        scope = raw_input()
-        while not scope.isdigit():
-            print "请输入数字作为运算范围哦！"
-            scope = raw_input()
-        scope = int(scope)
-        print '\n欢迎进入 %d 以内乘法！' % scope
-        print '退出该运算请输入: tc'
-        print '查看当前成绩请输入：ck'
-        while 1:
-            a = random.randint(0, scope)
-            b = random.randint(0, scope)
-            print str(a) + 'x' + str(b) + '=' + '?'
-            c = raw_input()
-            if c == 'tc':
-                print '\n目前为止您的得分是：',
-                self.arithmetic_result()
-                print '下次再见哦！\n'
-                return
-            if c == 'ck':
-                print '\n目前为止,',
-                self.arithmetic_result()
-                print '继续加油哦！\n'
-                continue
-            if c == 'gh':
-                print '请输入新的运算范围：'
-                scope = raw_input()
-                while not scope.isdigit():
-                    print "请输入数字更换运算范围"
-                    scope = raw_input()
-                scope = int(scope)
-                continue
-            if not c.isdigit():
-                print '继续答题请输入数字, 退出请输入：tc, 查看成绩请输入：ck, 更换运算范围请输入：gh'
-                continue
-            c = int(c)
-            while a * b != c:
-                print '很可惜，您答错了，请重新输入:'
-                print str(a) + 'x' + str(b) + '=' + '?'
-                c = raw_input()
-                while not c.isdigit():
-                    print '请输入数字类型或输入tc跳过本题'
-                    c = raw_input()
-                    if c == 'tc':
-                        break
-                if c == 'tc':
-                    break
-                c = int(c)
-                self.wrongCount = self.wrongCount + 1
-                self.total = self.total + 1
-                if self.wrongCount > self.rightCount and self.total % 10 == 0:
-                    print '\n目前为止，',
-                    self.arithmetic_result()
-            if c == 'tc':
-                continue
-            self.rightCount = self.rightCount + 1
-            self.total = self.total + 1
-            print '答对了，您真聪明！\n'
-            if self.total % 100 == 0:
-                print '您已经答了上百道题,劳逸结合对学习事半功倍哦！\n'
-                continue
-            if self.total % 10 == 0:
-                print '\n目前为止，',
-                self.arithmetic_result()
-                print '继续加油！\n'
-
-    def division(self):
-        print '欢迎来到除法运算！ \n请先设定除法运算范围哦！ \n例如10以内除法请输入：10'
-        scope = raw_input()
-        while not scope.isdigit():
-            print "请输入数字作为运算范围哦！"
-            scope = raw_input()
-        scope = int(scope)
-        print '\n欢迎进入 %d 以内除法！' % scope
-        print '退出该运算请输入: tc'
-        print '查看当前成绩请输入：ck'
-        while 1:
-            zc = random.randint(0, scope)
-            b = random.randint(0, scope)
-            while not b:
+            if op == '/' and not divBool:
+                d = random.randint(0, scope)
                 b = random.randint(0, scope)
-            a = zc*b
-            print str(a) + '÷' + str(b) + '=' + '?'
+                a = b*d
+            if op == '/' and b == 0:
+                continue
+            break
+        return a, b
+
+    def create_operation(self, op):
+        objFactory = factoryOperations()
+        opObj = objFactory.create_factory(op)
+        if not opObj:
+            print "factory create failed!"
+            return
+        op_map = {
+            '+': ['加法', ' + '],
+            '-': ['减法', ' - '],
+            '*': ['乘法', ' x '],
+            '/': ['除法', ' ÷ ']
+        }
+        print '请先设定{0}运算范围哦！ \n例如10以内{0}请输入：10'.format(
+            op_map[op][0])
+        scope = raw_input()
+        while not scope.isdigit():
+            print "请输入数字作为运算范围哦！"
+            scope = raw_input()
+        scope = int(scope)
+        print '\n欢迎进入 {0} 以内{1}！'.format(scope, op_map[op][0])
+        print '****************************************************'
+        print '退出该运算请输入: tc'
+        print '查看当前成绩请输入: ck'
+        print '切换浮点运算请输入: qhfd'
+        print '切换减法运算值为负数的运算请输入: qhjf'
+        print '切换除法运算值为浮点数(保留两位小数)的运算请输入: qhcf'
+        print '****************************************************'
+        floatBool = False
+        subBool = False
+        divBool = False
+        while 1:
+            a, b = self.get_ab(floatBool, subBool, divBool, scope, op)
+            print str(a) + op_map[op][1] + str(b) + ' = ?'
             c = raw_input()
-            if c == 'tc':
-                print '\n目前为止您的得分是：',
-                self.arithmetic_result()
-                print '下次再见哦！\n'
-                return
-            if c == 'ck':
-                print '\n目前为止,',
-                self.arithmetic_result()
-                print '继续加油哦！\n'
-                continue
-            if c == 'gh':
-                print '请输入新的运算范围：'
-                scope = raw_input()
-                while not scope.isdigit():
-                    print "请输入数字更换运算范围"
+            while not c.isdigit() and not self.is_float(c):
+                if c == 'tc':
+                    print '\n目前为止您的得分是：',
+                    self.arithmetic_result()
+                    print '下次再见哦！\n'
+                    return
+                if c == 'ck':
+                    print '\n目前为止,',
+                    self.arithmetic_result()
+                    print '继续加油哦！\n'
+                if c == 'gh':
+                    print '请输入新的运算范围：'
                     scope = raw_input()
-                scope = int(scope)
-                continue
-            if not c.isdigit():
-                print '继续答题请输入数字, 退出请输入：tc, 查看成绩请输入：ck, 更换运算范围请输入：gh'
-                continue
-            c = int(c)
-            while a / b != c:
-                print '很可惜，您答错了，请重新输入:'
-                print str(a) + '÷' + str(b) + '=' + '?'
+                    while not scope.isdigit():
+                        print "请输入数字更换运算范围"
+                        scope = raw_input()
+                    scope = int(scope)
+                if c == 'qhfd':
+                    floatBool = not floatBool
+                if c == 'qhjf':
+                    subBool = not subBool
+                if c == 'qhcf':
+                    divBool = not divBool
+                print '****************************************************'
+                print '继续答题请输入数字'
+                print '退出请输入：tc'
+                print '查看成绩请输入：ck'
+                print '更换运算范围请输入：gh'
+                print '切换浮点运算请输入: qhfd'
+                print '切换减法运算值为负数的运算请输入: qhjf'
+                print '切换除法运算值为浮点数(保留两位小数)的运算请输入: qhcf'
+                print '****************************************************'
+                print str(a) + op_map[op][1] + str(b) + ' = ?'
                 c = raw_input()
-                while not c.isdigit():
+            c = self.str2Num(c)
+            while not abs(opObj.get_result(a, b)-c) < 1e-09:
+                print '很可惜，您答错了，请重新输入:'
+                print str(a) + op_map[op][1] + str(b) + ' = ?'
+                c = raw_input()
+                while c == 'ts':
+                    print opObj.get_result(a, b)
+                    c = raw_input()
+                while not c.isdigit() and not self.is_float(c):
                     print '请输入数字类型或输入tc跳过本题'
                     c = raw_input()
                     if c == 'tc':
                         break
+                    while c == 'ts':
+                        print opObj.get_result(a, b)
+                        c = raw_input()
                 if c == 'tc':
                     break
-                c = int(c)
+                c = self.str2Num(c)
                 self.wrongCount = self.wrongCount + 1
                 self.total = self.total + 1
                 if self.wrongCount > self.rightCount and self.total % 10 == 0:
@@ -291,7 +224,8 @@ class arithmeticOperations(object):
             self.total = self.total + 1
             print '答对了，您真聪明！\n'
             if self.total % 100 == 0:
-                print '您已经答了上百道题,劳逸结合对学习事半功倍哦！\n'
+                print '您已经答了 %d 道题, 休息一下吧！\n劳逸结合对学习事半功倍哦！\n'.format(
+                    self.total)
                 continue
             if self.total % 10 == 0:
                 print '\n目前为止，',
@@ -319,19 +253,17 @@ class arithmeticOperations(object):
                 self.arithmetic_result()
                 print '继续加油哦！\n'
             switch_dict = {
-                '1': self.addition,
-                '2': self.substration,
-                '3': self.multiplication,
-                '4': self.division
+                '1': (self.create_operation, '+'),
+                '2': (self.create_operation, '-'),
+                '3': (self.create_operation, '*'),
+                '4': (self.create_operation, '/')
             }
             func = switch_dict.get(num)
             if not func:
                 continue
-            if callable(func):
-                func()
             else:
-                print func
+                func[0](func[1])
 
 if __name__ == '__main__':
-    ca = arithmeticOperations()
+    ca = factoryOperationsWrapper()
     ca.switch_func()
