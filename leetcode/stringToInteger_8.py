@@ -1,3 +1,5 @@
+import re
+
 '''
 8. String to Integer (atoi)
 Implement atoi to convert a string to an integer.
@@ -61,10 +63,36 @@ class Solution(object):
                 return int(digit) if int(digit) <= 2147483647 else 2147483647
             return 0
 
+class Solution2:
+    # @return an integer
+    def myAtoi(self, str):
+        str = str.strip()
+        # extract string begin with '+', '-' or '0' zero or more
+        # then connect digit one or more
+        # \D means match nonnumeric string
+        str = re.findall('(^[\+\-0]*\d+)\D*', str)
+
+        try:
+            print str
+            result = int(''.join(str))
+            print result
+            MAX_INT = 2147483647
+            MIN_INT = -2147483648
+            if result > MAX_INT > 0:
+                return MAX_INT
+            elif result < MIN_INT < 0:
+                return MIN_INT
+            else:
+                return result
+        except:
+            return 0
+
 if __name__ == '__main__':
     cs = Solution()
     # print cs.myAtoi("    010")
     # print cs.myAtoi("  -0012a42")
     # print cs.myAtoi("1")
     # print cs.myAtoi("+-2")
-    print cs.myAtoi("+1")
+    # print cs.myAtoi("+1")
+    cs2 = Solution2()
+    print cs2.myAtoi('+0232ad2')
