@@ -19,9 +19,10 @@ class Solution {
         }
         int len = nums.length;
         Arrays.sort(nums);
-        int closest = nums[0] + nums[1] + nums[2];
-        for (int i = 0; i <= len-2; i ++){
-            if (i > 0 && i <= len-2 && nums[i] == nums[i-1]){
+        int distance = Integer.MAX_VALUE;
+        int closest = 0;
+        for (int i = 0; i < len-2; i ++){
+            if (i > 0 && i < len-2 && nums[i] == nums[i-1]){
                 continue;
             }
             int left = i;
@@ -31,18 +32,16 @@ class Solution {
                 int total = nums[left] + nums[mid] + nums[right];
                 if (total - target < 0){
                     mid ++;
-                    if (Math.abs(total-target) < Math.abs(closest-target)){
-                        closest = total;
-                        System.out.format("nums[left]:%d, nums[mid]:%d, nums[right]:%d\n",
-                                nums[left], nums[mid], nums[right]);
+                    if ((target-total) < distance){
+                        distance = target-total;
+                        closest = total;                     
                     }
                 }
                 else if (total - target > 0){
                     right --;
-                    if (Math.abs(total-target) < Math.abs(closest-target)){
+                    if ((total-target) < distance){
+                        distance = total-target;
                         closest = total;
-                        System.out.format("nums[left]:%d, nums[mid]:%d, nums[right]:%d\n",
-                                nums[left], nums[mid], nums[right]);
                     }
                 }
                 else {
@@ -51,5 +50,7 @@ class Solution {
             }
         }
         return closest;
-    }
+    } 
+}
+
 }
