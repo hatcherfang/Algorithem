@@ -21,21 +21,19 @@ class Solution(object):
         :rtype: int
         """
         # index = 0
-        maxLen = -1
-        subList = []
+        maxLen = 0
+        subString = ""
         for i, sub in enumerate(s):
-            if sub not in subList:
-                subList.append(sub)
+            if sub not in subString:
+                subString = subString + sub
             else:
-                if len(subList) > maxLen:
-                    maxLen = len(subList)
+                if len(subString) > maxLen:
+                    maxLen = len(subString)
                     # index = i - maxLen
-                subList = subList[subList.index(sub)+1:]
-                subList.append(sub)
-        if maxLen == -1:
-            maxLen = len(subList)
-        elif maxLen < len(subList):
-            maxLen = len(subList)
+                subString = subString[subString.index(sub)+1:]
+                subString = subString + sub
+        if maxLen < len(subString):
+            maxLen = len(subString)
             # index = len(s) - len(subList)
         return maxLen
 
