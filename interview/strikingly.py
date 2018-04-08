@@ -9,10 +9,10 @@
 #
 # Golden ratio is the limit of G(n) when n approaches infinity.
 #
-# With all the above information, we have a way to estimating golden ratio g: 
-# 
-# Find the first n that matches |G(n+1) - G(n)| < t, where t is the 
-# precision threshold, then the corresponding G(n) is considered as 
+# With all the above information, we have a way to estimating golden ratio g:
+#
+# Find the first n that matches |G(n+1) - G(n)| < t, where t is the
+# precision threshold, then the corresponding G(n) is considered as
 # the estimated value of golden ratio.
 #
 
@@ -39,13 +39,13 @@ def G(n):
         return 0
     return float(array[n])/array[n+1]
 
+
 def estimate_golden_ratio(t):
     n = 0
     while abs(G(n+1) - G(n)) >= t and n <= 50:
         n = n + 1
     return n
-        
-            
+
 if __name__ == "__main__":
     global array
     array = [0, 1]
